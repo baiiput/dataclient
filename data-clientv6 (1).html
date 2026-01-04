@@ -3483,8 +3483,8 @@
 
             // Reset quick filter
             currentQuickFilter = 'all';
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+            document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.filter-chip[data-filter="all"]').classList.add('active');
 
             document.getElementById('activeFilterIndicator').style.display = 'none';
 
