@@ -2968,16 +2968,7 @@
                 applyFilters();
                 updateFilterBadges();
             });
-            
-            // Quick filters
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    applyQuickFilter(this.dataset.filter);
-                });
-            });
-            
+
             // Sheet selector
             document.querySelectorAll('.sheet-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
