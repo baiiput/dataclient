@@ -3598,8 +3598,25 @@
             
             filteredData.forEach((row, index) => {
                 const tr = document.createElement('tr');
-                tr.addEventListener('click', function() {
-                    openModal(index);
+                tr.addEventListener('click', function(e) {
+                    const clickedElement = e.target;
+                    const clickedTd = clickedElement.closest('td');
+
+                    // Jika klik di td
+                    if (clickedTd) {
+                        // Cek apakah td ini kosong (tidak ada data)
+                        const tdText = clickedTd.textContent.trim();
+                        const isEmpty = tdText === '' || tdText === '-';
+
+                        // Hanya buka modal jika td kosong
+                        if (isEmpty) {
+                            openModal(index);
+                        }
+                        // Jika td ada isinya, tidak buka modal
+                    } else {
+                        // Jika klik bukan di td (area lain dalam tr), buka modal
+                        openModal(index);
+                    }
                 });
                 
                 // Only render visible columns
