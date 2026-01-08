@@ -120,6 +120,49 @@
             transform: translateY(-1px);
         }
 
+        /* Mobile adjustments for theme toggle */
+        @media (max-width: 600px) {
+            .header h1 {
+                padding-right: 90px;
+                font-size: 20px;
+            }
+
+            .theme-toggle {
+                top: 15px;
+                right: 15px;
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                padding-right: 85px;
+                font-size: 18px;
+            }
+
+            .theme-toggle {
+                top: 12px;
+                right: 12px;
+                padding: 5px 10px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .header h1 {
+                padding-right: 80px;
+                font-size: 16px;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 4px 8px;
+                font-size: 9px;
+            }
+        }
+
         /* Sheet Selector */
         .sheet-selector {
             display: flex;
@@ -3628,9 +3671,9 @@
                                 td.textContent = value;
                             }
                         }
-                    } 
+                    }
                     // Single data box styling
-                    else if (['A', 'E', 'F', 'G', 'R'].includes(col) && value) {
+                    else if (['A', 'E', 'F', 'G', 'K', 'R'].includes(col) && value) {
                         const dataBox = document.createElement('div');
                         dataBox.className = 'single-data-box';
                         
@@ -3657,15 +3700,14 @@
                         const copyBtn = document.createElement('button');
                         copyBtn.className = 'copy-btn';
                         copyBtn.textContent = col === 'G' ? '📱' : '📋';
-                        copyBtn.title = col === 'G' ? 'Copy WA Link' : 'Copy: ' + value;
-                        
+                        copyBtn.title = col === 'G' ? 'Copy Nomor WA' : 'Copy: ' + value;
+
                         if (col === 'G') {
                             copyBtn.classList.add('wa-btn');
                             copyBtn.onclick = function(e) {
                                 e.stopPropagation();
                                 const cleanNumber = value.toString().replace(/\D/g, '');
-                                const waLink = `wa.me/${cleanNumber}`;
-                                copyToClipboard(waLink, this);
+                                copyToClipboard(cleanNumber, this);
                             };
                         } else {
                             copyBtn.onclick = function(e) {
