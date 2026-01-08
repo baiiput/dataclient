@@ -1386,37 +1386,45 @@
         /* Mobile responsive for buttons */
         @media (max-width: 768px) {
             .copy-btn {
-                right: 22px;
-                width: 16px;
-                height: 16px;
-                font-size: 8px;
-                padding: 1px 2px;
+                right: 22px !important;
+                width: 16px !important;
+                min-width: 16px !important;
+                max-width: 16px !important;
+                height: 16px !important;
+                font-size: 8px !important;
+                padding: 1px 2px !important;
             }
 
             .info-btn {
-                right: 2px;
-                width: 16px;
-                height: 16px;
-                font-size: 8px;
-                padding: 1px 2px;
+                right: 2px !important;
+                width: 16px !important;
+                min-width: 16px !important;
+                max-width: 16px !important;
+                height: 16px !important;
+                font-size: 8px !important;
+                padding: 1px 2px !important;
             }
         }
 
         @media (max-width: 480px) {
             .copy-btn {
-                right: 20px;
-                width: 14px;
-                height: 14px;
-                font-size: 7px;
-                padding: 1px 2px;
+                right: 20px !important;
+                width: 14px !important;
+                min-width: 14px !important;
+                max-width: 14px !important;
+                height: 14px !important;
+                font-size: 7px !important;
+                padding: 1px 2px !important;
             }
 
             .info-btn {
-                right: 2px;
-                width: 14px;
-                height: 14px;
-                font-size: 7px;
-                padding: 1px 2px;
+                right: 2px !important;
+                width: 14px !important;
+                min-width: 14px !important;
+                max-width: 14px !important;
+                height: 14px !important;
+                font-size: 7px !important;
+                padding: 1px 2px !important;
             }
         }
 
@@ -2752,7 +2760,7 @@
         // ===== THEME MANAGEMENT =====
         
         function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
             document.documentElement.setAttribute('data-theme', newTheme);
