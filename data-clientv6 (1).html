@@ -1420,6 +1420,21 @@
             }
         }
 
+        /* Disable hover scaling on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .copy-btn:hover {
+                transform: translateY(-50%) scale(1) !important;
+            }
+
+            .info-btn:hover {
+                transform: translateY(-50%) scale(1) !important;
+            }
+
+            .copy-btn.copied {
+                transform: translateY(-50%) scale(1) !important;
+            }
+        }
+
         /* Status indicators */
         .status-lunas { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         .status-belum { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
@@ -2750,10 +2765,10 @@
         }
 
         function initializeTheme() {
-            const savedTheme = localStorage.getItem('preferred-theme') || 'light';
-            
+            const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
+
             document.documentElement.setAttribute('data-theme', savedTheme);
-            
+
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 themeToggle.textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
