@@ -1349,6 +1349,40 @@
             opacity: 1;
         }
 
+        /* Info button */
+        .info-btn {
+            position: absolute;
+            top: 50%;
+            right: 25px;
+            transform: translateY(-50%);
+            background: #3b82f6;
+            color: var(--text-white);
+            border: none;
+            border-radius: 3px;
+            padding: 2px 4px;
+            font-size: 9px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 5;
+            min-width: 16px;
+            min-height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            background: #2563eb;
+        }
+
+        td:hover .info-btn,
+        .line-with-copy:hover .info-btn,
+        .single-data-box:hover .info-btn {
+            opacity: 1;
+        }
+
         /* Status indicators */
         .status-lunas { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         .status-belum { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
@@ -3598,27 +3632,7 @@
             
             filteredData.forEach((row, index) => {
                 const tr = document.createElement('tr');
-                tr.addEventListener('click', function(e) {
-                    const clickedElement = e.target;
-                    const clickedTd = clickedElement.closest('td');
 
-                    // Jika klik di td
-                    if (clickedTd) {
-                        // Cek apakah td ini kosong (tidak ada data)
-                        const tdText = clickedTd.textContent.trim();
-                        const isEmpty = tdText === '' || tdText === '-';
-
-                        // Hanya buka modal jika td kosong
-                        if (isEmpty) {
-                            openModal(index);
-                        }
-                        // Jika td ada isinya, tidak buka modal
-                    } else {
-                        // Jika klik bukan di td (area lain dalam tr), buka modal
-                        openModal(index);
-                    }
-                });
-                
                 // Only render visible columns
                 visibleColumns.forEach(col => {
                     const td = document.createElement('td');
@@ -3661,7 +3675,17 @@
                                     copyToClipboard(line.trim(), this);
                                 };
                                 lineDiv.appendChild(copyBtn);
-                                
+
+                                const infoBtn = document.createElement('button');
+                                infoBtn.className = 'info-btn';
+                                infoBtn.textContent = 'ℹ️';
+                                infoBtn.title = 'Lihat Detail';
+                                infoBtn.onclick = function(e) {
+                                    e.stopPropagation();
+                                    openModal(index);
+                                };
+                                lineDiv.appendChild(infoBtn);
+
                                 td.appendChild(lineDiv);
                             });
                         } else {
@@ -3682,7 +3706,17 @@
                                     copyToClipboard(value, this);
                                 };
                                 dataBox.appendChild(copyBtn);
-                                
+
+                                const infoBtn = document.createElement('button');
+                                infoBtn.className = 'info-btn';
+                                infoBtn.textContent = 'ℹ️';
+                                infoBtn.title = 'Lihat Detail';
+                                infoBtn.onclick = function(e) {
+                                    e.stopPropagation();
+                                    openModal(index);
+                                };
+                                dataBox.appendChild(infoBtn);
+
                                 td.appendChild(dataBox);
                             } else {
                                 td.textContent = value;
@@ -3732,8 +3766,19 @@
                                 copyToClipboard(value, this);
                             };
                         }
-                        
+
                         dataBox.appendChild(copyBtn);
+
+                        const infoBtn = document.createElement('button');
+                        infoBtn.className = 'info-btn';
+                        infoBtn.textContent = 'ℹ️';
+                        infoBtn.title = 'Lihat Detail';
+                        infoBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            openModal(index);
+                        };
+                        dataBox.appendChild(infoBtn);
+
                         td.appendChild(dataBox);
                     } else {
                         td.textContent = value;
