@@ -1301,7 +1301,7 @@
         .copy-btn {
             position: absolute;
             top: 50%;
-            right: 25px;
+            right: 22px;
             transform: translateY(-50%);
             background: var(--accent-blue);
             color: var(--text-white);
@@ -1312,9 +1312,9 @@
             cursor: pointer;
             opacity: 0;
             transition: all 0.2s ease;
-            z-index: 5;
-            min-width: 16px;
-            height: 16px;
+            z-index: 6;
+            min-width: 18px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1364,9 +1364,9 @@
             cursor: pointer;
             opacity: 0;
             transition: all 0.2s ease;
-            z-index: 5;
-            min-width: 16px;
-            min-height: 16px;
+            z-index: 7;
+            min-width: 18px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1381,6 +1381,43 @@
         .line-with-copy:hover .info-btn,
         .single-data-box:hover .info-btn {
             opacity: 1;
+        }
+
+        /* Mobile responsive for buttons */
+        @media (max-width: 768px) {
+            .copy-btn {
+                right: 20px;
+                min-width: 16px;
+                height: 16px;
+                font-size: 8px;
+                padding: 1px 3px;
+            }
+
+            .info-btn {
+                right: 2px;
+                min-width: 16px;
+                height: 16px;
+                font-size: 8px;
+                padding: 1px 3px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .copy-btn {
+                right: 18px;
+                min-width: 14px;
+                height: 14px;
+                font-size: 7px;
+                padding: 1px 2px;
+            }
+
+            .info-btn {
+                right: 2px;
+                min-width: 14px;
+                height: 14px;
+                font-size: 7px;
+                padding: 1px 2px;
+            }
         }
 
         /* Status indicators */
