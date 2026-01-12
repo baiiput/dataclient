@@ -1662,6 +1662,182 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
+        /* Pagination Styles */
+        .pagination-container {
+            padding: 20px;
+            background: var(--bg-container);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .pagination-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .pagination-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .items-per-page {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .items-per-page-select {
+            padding: 6px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-stats);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .items-per-page-select:hover {
+            border-color: var(--accent-blue);
+            background: var(--bg-surface);
+        }
+
+        .items-per-page-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pagination-btn {
+            padding: 8px 16px;
+            background: var(--bg-stats);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .pagination-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .page-number {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-stats);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .page-number:hover {
+            background: rgba(37, 99, 235, 0.1);
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .page-number.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .page-number.ellipsis {
+            border: none;
+            background: transparent;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .pagination-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .pagination-btn {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .page-number {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pagination-container {
+                padding: 12px;
+            }
+
+            .pagination-btn span {
+                display: none;
+            }
+
+            .page-number {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+        }
+
         /* Density modes */
         .density-compact td {
             padding: 6px 4px;
@@ -2438,6 +2614,32 @@
                 </tbody>
             </table>
 
+            <!-- Pagination Controls -->
+            <div id="paginationContainer" class="pagination-container" style="display: none;">
+                <div class="pagination-info">
+                    <span id="paginationInfo" class="pagination-text">Showing 1-50 of 100 entries</span>
+                    <div class="items-per-page">
+                        <label for="itemsPerPageSelect">Items per page:</label>
+                        <select id="itemsPerPageSelect" class="items-per-page-select" onchange="changeItemsPerPage(this.value)">
+                            <option value="50" selected>50</option>
+                            <option value="75">75</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" id="prevPageBtn" onclick="changePage(currentPage - 1)" disabled>
+                        <span>←</span> Previous
+                    </button>
+                    <div id="pageNumbers" class="page-numbers">
+                        <!-- Page numbers will be generated dynamically -->
+                    </div>
+                    <button class="pagination-btn" id="nextPageBtn" onclick="changePage(currentPage + 1)">
+                        Next <span>→</span>
+                    </button>
+                </div>
+            </div>
+
             <div id="noDataIndicator" class="no-data" style="display: none;">
                 <p>📭 Tidak ada data yang sesuai dengan filter</p>
             </div>
@@ -2588,6 +2790,10 @@
         let currentModalRowIndex = 0;
         let controlsCollapsed = false;
         let currentQuickFilter = 'all';
+
+        // Pagination state
+        let currentPage = 1;
+        let itemsPerPage = 50;  // Default 50 items per page
 
         // Column visibility configuration
         let columnVisibility = {
@@ -3356,11 +3562,12 @@
         
         function switchSheet(sheetKey) {
             if (!sheetConfig[sheetKey] || isLoading) return;
-            
+
             // Reset sorting when switching sheets
             currentSort.column = null;
             currentSort.direction = null;
-            
+            currentPage = 1;  // Reset to first page
+
             // Clear caches when switching sheets
             filterCache.clear();
             statsCache.clear();
@@ -3692,9 +3899,10 @@
         function applyFilters() {
             // Clear filter cache to force recalculation
             filterCache.clear();
-            
+
             currentSort.column = null;
             currentSort.direction = null;
+            currentPage = 1;  // Reset to first page when filtering
             
             const filters = {
                 globalSearch: document.getElementById('globalSearch').value.toLowerCase(),
@@ -3743,11 +3951,12 @@
             // Clear caches
             filterCache.clear();
             statsCache.clear();
-            
+
             // Reset sorting
             currentSort.column = null;
             currentSort.direction = null;
-            
+            currentPage = 1;  // Reset to first page
+
             // Clear text inputs
             document.getElementById('globalSearch').value = '';
             document.getElementById('filterNama').value = '';
@@ -3841,8 +4050,19 @@
             });
 
             tbody.innerHTML = '';
-            
-            filteredData.forEach((row, index) => {
+
+            // Pagination calculation
+            const totalItems = filteredData.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const paginatedData = filteredData.slice(startIndex, endIndex);
+
+            // Update pagination UI
+            updatePaginationUI(totalItems, startIndex, endIndex, totalPages);
+
+            paginatedData.forEach((row, relativeIndex) => {
+                const index = startIndex + relativeIndex;  // Original index in filteredData
                 const tr = document.createElement('tr');
 
                 // Only render visible columns
@@ -4004,6 +4224,117 @@
             });
         }
 
+        // ===== PAGINATION FUNCTIONS =====
+
+        function updatePaginationUI(totalItems, startIndex, endIndex, totalPages) {
+            const paginationContainer = document.getElementById('paginationContainer');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+
+            // Show/hide pagination container
+            if (totalItems === 0) {
+                paginationContainer.style.display = 'none';
+                return;
+            } else {
+                paginationContainer.style.display = 'flex';
+            }
+
+            // Update info text
+            paginationInfo.textContent = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} entries`;
+
+            // Update button states
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+            // Render page numbers
+            renderPageNumbers(totalPages);
+        }
+
+        function renderPageNumbers(totalPages) {
+            const pageNumbersContainer = document.getElementById('pageNumbers');
+            pageNumbersContainer.innerHTML = '';
+
+            if (totalPages <= 1) return;
+
+            const maxVisible = 7;  // Maximum page numbers to show
+            let startPage = 1;
+            let endPage = totalPages;
+
+            if (totalPages > maxVisible) {
+                const halfVisible = Math.floor(maxVisible / 2);
+
+                if (currentPage <= halfVisible) {
+                    // Near the start
+                    endPage = maxVisible - 2;
+                } else if (currentPage >= totalPages - halfVisible) {
+                    // Near the end
+                    startPage = totalPages - (maxVisible - 3);
+                } else {
+                    // In the middle
+                    startPage = currentPage - halfVisible + 1;
+                    endPage = currentPage + halfVisible - 1;
+                }
+            }
+
+            // Always show first page
+            if (startPage > 1) {
+                addPageNumber(1);
+                if (startPage > 2) {
+                    addEllipsis();
+                }
+            }
+
+            // Show page range
+            for (let i = startPage; i <= endPage; i++) {
+                addPageNumber(i);
+            }
+
+            // Always show last page
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    addEllipsis();
+                }
+                addPageNumber(totalPages);
+            }
+        }
+
+        function addPageNumber(pageNum) {
+            const pageBtn = document.createElement('div');
+            pageBtn.className = 'page-number' + (pageNum === currentPage ? ' active' : '');
+            pageBtn.textContent = pageNum;
+            pageBtn.onclick = () => changePage(pageNum);
+            document.getElementById('pageNumbers').appendChild(pageBtn);
+        }
+
+        function addEllipsis() {
+            const ellipsis = document.createElement('div');
+            ellipsis.className = 'page-number ellipsis';
+            ellipsis.textContent = '...';
+            document.getElementById('pageNumbers').appendChild(ellipsis);
+        }
+
+        function changePage(newPage) {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+            if (newPage < 1 || newPage > totalPages || newPage === currentPage) {
+                return;
+            }
+
+            currentPage = newPage;
+            renderTable();
+
+            // Scroll to top of table smoothly
+            document.getElementById('dataTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function changeItemsPerPage(newValue) {
+            itemsPerPage = parseInt(newValue);
+            currentPage = 1;  // Reset to first page
+            renderTable();
+            showToast(`📄 Showing ${itemsPerPage} items per page`);
+        }
+
         // ===== SORTING FUNCTIONS =====
         
         function sortTable(column) {
@@ -4025,7 +4356,9 @@
                 currentSort.column = column;
                 currentSort.direction = 'asc';
             }
-            
+
+            currentPage = 1;  // Reset to first page when sorting
+
             // Sort the data
             filteredData.sort((a, b) => {
                 let valueA = a[column] || '';
