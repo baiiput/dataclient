@@ -7,22 +7,22 @@
     <style>
         /* CSS Variables for Liquid Glass Theme */
         :root[data-theme="light"] {
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.4);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --bg-container: rgba(255, 255, 255, 0.15);
-            --bg-header: rgba(255, 255, 255, 0.2);
-            --bg-controls: rgba(255, 255, 255, 0.2);
-            --bg-stats: rgba(255, 255, 255, 0.15);
-            --bg-table-header: rgba(30, 41, 59, 0.8);
-            --bg-row-even: rgba(255, 255, 255, 0.05);
-            --bg-row-odd: rgba(255, 255, 255, 0.1);
-            --bg-row-hover: rgba(59, 130, 246, 0.15);
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
+            --bg-container: rgba(255, 255, 255, 0.4);
+            --bg-header: rgba(255, 255, 255, 0.5);
+            --bg-controls: rgba(255, 255, 255, 0.4);
+            --bg-stats: rgba(255, 255, 255, 0.3);
+            --bg-table-header: rgba(30, 41, 59, 0.95);
+            --bg-row-even: rgba(255, 255, 255, 0.4);
+            --bg-row-odd: rgba(255, 255, 255, 0.5);
+            --bg-row-hover: rgba(59, 130, 246, 0.25);
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #475569;
             --text-white: #ffffff;
-            --border-color: rgba(255, 255, 255, 0.2);
+            --border-color: rgba(255, 255, 255, 0.3);
             --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             --shadow-hover: 0 8px 24px rgba(59, 130, 246, 0.3);
             --accent-blue: #3b82f6;
@@ -30,7 +30,7 @@
             --accent-red: #ef4444;
             --accent-orange: #f59e0b;
             --accent-purple: #8b5cf6;
-            --card-bg: rgba(255, 255, 255, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.4);
             --primary-color: #3b82f6;
             --primary-hover: #2563eb;
             --primary-rgb: 59, 130, 246;
@@ -132,14 +132,14 @@
             max-width: 100%;
             margin: 0 auto;
             background: var(--glass-bg);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
             border-radius: 24px;
             box-shadow: var(--glass-shadow);
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
             border: 1px solid var(--glass-border);
-            animation: floatIn 0.8s ease-out;
+            animation: floatIn 0.6s ease-out;
         }
 
         @keyframes floatIn {
@@ -435,19 +435,19 @@
         /* Filter Card Styling */
         .filter-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px) saturate(180%);
-            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
             border-radius: 16px;
             box-shadow: var(--glass-shadow);
             border: 1px solid var(--glass-border);
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
         }
 
         /* Only add hover to collapsible cards, NOT search card */
         .filter-card:not(.search-card):hover {
             box-shadow: 0 12px 32px rgba(59, 130, 246, 0.25);
-            transform: translateY(-4px) scale(1.01);
+            transform: translateY(-2px);
             border-color: rgba(59, 130, 246, 0.4);
         }
 
@@ -1402,8 +1402,8 @@
 
         th {
             background: var(--bg-table-header);
-            backdrop-filter: blur(10px) saturate(180%);
-            -webkit-backdrop-filter: blur(10px) saturate(180%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             color: var(--text-white);
             padding: 14px 10px;
             text-align: center;
@@ -1419,15 +1419,11 @@
             cursor: pointer;
             user-select: none;
             position: relative;
-            transition: all 0.3s ease;
+            transition: background 0.2s ease;
         }
 
         th:hover {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(15px) saturate(200%);
-            -webkit-backdrop-filter: blur(15px) saturate(200%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            background: rgba(15, 23, 42, 1);
         }
 
         th.sortable {
@@ -1479,25 +1475,18 @@
 
         tr:nth-child(even) {
             background: var(--bg-row-even);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
         }
         tr:nth-child(odd) {
             background: var(--bg-row-odd);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
         }
 
         tr {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background 0.2s ease, box-shadow 0.2s ease;
         }
 
         tr:hover {
             background: var(--bg-row-hover) !important;
-            backdrop-filter: blur(10px) saturate(150%) !important;
-            -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
-            transform: scale(1.005) translateY(-2px);
-            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
             cursor: pointer;
         }
 
