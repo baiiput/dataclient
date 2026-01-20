@@ -217,6 +217,101 @@
             margin-bottom: 15px;
         }
 
+        /* Auto-refresh controls */
+        .auto-refresh-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .auto-refresh-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-green);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            left: 24px;
+        }
+
+        .refresh-interval {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .refresh-interval select {
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            color: var(--text-white);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-interval select:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .refresh-interval select option {
+            background: var(--bg-container);
+            color: var(--text-primary);
+        }
+
+        .last-updated {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Progress bar */
+        .progress-bar-container {
+            position: relative;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            width: 100%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
         .theme-toggle {
             position: absolute;
             top: 20px;
@@ -2488,10 +2583,31 @@
         <div class="header">
             <h1>📊 Data Client Starlink</h1>
             <div class="status-info">
-                <span id="lastUpdate">Memuat data...</span> | 
-                <span>Manual Refresh Mode</span>
+                <span id="lastUpdate">Memuat data...</span>
             </div>
-            
+
+            <!-- Auto-refresh controls -->
+            <div class="auto-refresh-container">
+                <div class="auto-refresh-toggle">
+                    <span>Auto Refresh:</span>
+                    <div class="toggle-switch" id="autoRefreshToggle" onclick="toggleAutoRefresh()">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <div class="refresh-interval">
+                    <span>Interval:</span>
+                    <select id="refreshInterval" onchange="updateRefreshInterval()">
+                        <option value="60">1 minute</option>
+                        <option value="120" selected>2 minutes</option>
+                        <option value="180">3 minutes</option>
+                        <option value="300">5 minutes</option>
+                    </select>
+                </div>
+                <div class="last-updated">
+                    <span id="lastRefreshTime">Never refreshed</span>
+                </div>
+            </div>
+
             <!-- Sheet Selector -->
             <div class="sheet-selector">
                 <div class="sheet-tab active" data-sheet="client-aktif">
@@ -2511,6 +2627,11 @@
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
                 🌙 Dark Mode
             </button>
+        </div>
+
+        <!-- Progress bar for auto-refresh countdown -->
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="refreshProgressBar"></div>
         </div>
 
         <!-- Controls Toggle Button -->
@@ -2972,6 +3093,14 @@
         let currentPage = 1;
         let itemsPerPage = 25;  // Default 25 items per page
 
+        // Auto-refresh state
+        let autoRefreshEnabled = false;
+        let refreshInterval = 120; // Default 2 minutes in seconds
+        let refreshTimer = null;
+        let countdownInterval = null;
+        let remainingTime = 0;
+        let lastRefreshTime = null;
+
         // Column visibility configuration
         let columnVisibility = {
             'A': true,  // Nama
@@ -3315,6 +3444,122 @@
             const themeToggle = document.getElementById('themeToggle');
             if (themeToggle) {
                 themeToggle.textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+            }
+        }
+
+        // ===== AUTO-REFRESH FUNCTIONS =====
+
+        function toggleAutoRefresh() {
+            autoRefreshEnabled = !autoRefreshEnabled;
+            const toggle = document.getElementById('autoRefreshToggle');
+
+            if (autoRefreshEnabled) {
+                toggle.classList.add('active');
+                startAutoRefresh();
+                showToast('🔄 Auto-refresh enabled');
+            } else {
+                toggle.classList.remove('active');
+                stopAutoRefresh();
+                showToast('⏸️ Auto-refresh disabled');
+            }
+        }
+
+        function updateRefreshInterval() {
+            const select = document.getElementById('refreshInterval');
+            refreshInterval = parseInt(select.value);
+
+            if (autoRefreshEnabled) {
+                stopAutoRefresh();
+                startAutoRefresh();
+                showToast(`🕒 Interval updated to ${refreshInterval / 60} minute(s)`);
+            }
+        }
+
+        function startAutoRefresh() {
+            stopAutoRefresh(); // Clear any existing timers
+
+            remainingTime = refreshInterval;
+            updateProgressBar();
+            updateLastRefreshTime();
+
+            // Countdown timer (updates every 100ms for smooth progress bar)
+            countdownInterval = setInterval(() => {
+                remainingTime -= 0.1;
+                updateProgressBar();
+
+                if (remainingTime <= 0) {
+                    refreshData();
+                }
+            }, 100);
+        }
+
+        function stopAutoRefresh() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            remainingTime = 0;
+            updateProgressBar();
+        }
+
+        async function refreshData() {
+            try {
+                showToast('🔄 Refreshing data...');
+
+                // Fetch fresh data from Google Sheets
+                await loadData();
+
+                // Reset timer
+                remainingTime = refreshInterval;
+                lastRefreshTime = new Date();
+                updateLastRefreshTime();
+
+                showToast('✅ Data refreshed successfully');
+            } catch (error) {
+                console.error('Error refreshing data:', error);
+                showToast('❌ Failed to refresh data');
+            }
+        }
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('refreshProgressBar');
+            if (!progressBar) return;
+
+            if (!autoRefreshEnabled || remainingTime <= 0) {
+                progressBar.style.width = '100%';
+                return;
+            }
+
+            const percentage = (remainingTime / refreshInterval) * 100;
+            progressBar.style.width = percentage + '%';
+        }
+
+        function updateLastRefreshTime() {
+            const lastRefreshElement = document.getElementById('lastRefreshTime');
+            if (!lastRefreshElement) return;
+
+            if (!lastRefreshTime) {
+                lastRefreshElement.textContent = 'Never refreshed';
+                return;
+            }
+
+            const now = new Date();
+            const diff = Math.floor((now - lastRefreshTime) / 1000); // seconds
+
+            let timeText = '';
+            if (diff < 60) {
+                timeText = `${diff}s ago`;
+            } else if (diff < 3600) {
+                timeText = `${Math.floor(diff / 60)}m ago`;
+            } else {
+                timeText = `${Math.floor(diff / 3600)}h ago`;
+            }
+
+            lastRefreshElement.textContent = `Last: ${timeText}`;
+
+            // Update again in a few seconds if auto-refresh is enabled
+            if (autoRefreshEnabled) {
+                setTimeout(updateLastRefreshTime, 5000);
             }
         }
 
