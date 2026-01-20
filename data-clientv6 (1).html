@@ -6,37 +6,7 @@
     <title>Data Client Starlink - Enhanced</title>
     <style>
         /* CSS Variables for Liquid Glass Theme - iOS 26 Style */
-        :root[data-theme="light"] {
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(0, 0, 0, 0.1);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
-            --bg-container: rgba(255, 255, 255, 0.7);
-            --bg-header: rgba(255, 255, 255, 0.85);
-            --bg-controls: rgba(255, 255, 255, 0.7);
-            --bg-stats: rgba(255, 255, 255, 0.6);
-            --bg-table-header: rgba(15, 23, 42, 0.95);
-            --bg-row-even: rgba(255, 255, 255, 0.65);
-            --bg-row-odd: rgba(248, 250, 252, 0.7);
-            --bg-row-hover: rgba(59, 130, 246, 0.12);
-            --text-primary: #0f172a;
-            --text-secondary: #1e293b;
-            --text-muted: #475569;
-            --text-white: #ffffff;
-            --border-color: rgba(0, 0, 0, 0.08);
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.12);
-            --shadow-hover: 0 8px 24px rgba(59, 130, 246, 0.25);
-            --accent-blue: #2563eb;
-            --accent-green: #059669;
-            --accent-red: #dc2626;
-            --accent-orange: #ea580c;
-            --accent-purple: #7c3aed;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --primary-rgb: 37, 99, 235;
-        }
-
-        :root[data-theme="dark"] {
+        :root {
             --glass-bg: rgba(30, 41, 59, 0.4);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
@@ -113,21 +83,6 @@
             z-index: -1;
         }
 
-        /* Light mode background override */
-        :root[data-theme="light"] body::before {
-            background: linear-gradient(45deg,
-                #e0f2fe 0%,
-                #dbeafe 25%,
-                #e0e7ff 50%,
-                #ddd6fe 75%,
-                #e0f2fe 100%) !important;
-        }
-
-        :root[data-theme="light"] body::after {
-            background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.08), transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.08), transparent 50%),
-                        radial-gradient(circle at 40% 20%, rgba(56, 189, 248, 0.06), transparent 50%) !important;
-        }
 
         @keyframes liquidFlow {
             0%, 100% {
@@ -211,26 +166,6 @@
             transform: translateY(-2px);
         }
 
-        /* Enhanced glass effect for light mode */
-        :root[data-theme="light"] .container {
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-        }
-
-        :root[data-theme="light"] .filter-card {
-            backdrop-filter: blur(20px) saturate(160%);
-            -webkit-backdrop-filter: blur(20px) saturate(160%);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        :root[data-theme="light"] .header {
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
 
         .header {
             background: var(--bg-header);
@@ -349,95 +284,6 @@
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
 
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--text-white);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-            z-index: 10;
-        }
-
-        .theme-toggle::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .theme-toggle:hover::before {
-            width: 200px;
-            height: 200px;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.35);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .theme-toggle:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        /* Mobile adjustments for theme toggle */
-        @media (max-width: 600px) {
-            .header h1 {
-                padding-right: 90px;
-                font-size: 20px;
-            }
-
-            .theme-toggle {
-                top: 15px;
-                right: 15px;
-                padding: 6px 12px;
-                font-size: 11px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header h1 {
-                padding-right: 85px;
-                font-size: 18px;
-            }
-
-            .theme-toggle {
-                top: 12px;
-                right: 12px;
-                padding: 5px 10px;
-                font-size: 10px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .header h1 {
-                padding-right: 80px;
-                font-size: 16px;
-            }
-
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
-                padding: 4px 8px;
-                font-size: 9px;
-            }
-        }
 
         /* Sheet Selector */
         .sheet-selector {
@@ -533,17 +379,17 @@
             border: 1px solid #f59e0b;
         }
 
-        :root[data-theme="dark"] .category-aktif {
+        .category-aktif {
             background: #166534;
             color: #dcfce7;
         }
 
-        :root[data-theme="dark"] .category-non-aktif {
+        .category-non-aktif {
             background: #dc2626;
             color: #fecaca;
         }
 
-        :root[data-theme="dark"] .category-lepas {
+        .category-lepas {
             background: #92400e;
             color: #fef3c7;
         }
@@ -1045,12 +891,11 @@
             font-weight: bold;
         }
 
-        /* Dark Theme Adjustments */
-        :root[data-theme="dark"] .filter-card {
+        .filter-card {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        :root[data-theme="dark"] .filter-card:hover {
+        .filter-card:hover {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
@@ -1686,14 +1531,14 @@
             box-shadow: var(--shadow);
         }
 
-        :root[data-theme="dark"] .line-with-copy,
-        :root[data-theme="dark"] .single-data-box {
+        .line-with-copy,
+        .single-data-box {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.08);
         }
 
-        :root[data-theme="dark"] .line-with-copy:hover,
-        :root[data-theme="dark"] .single-data-box:hover {
+        .line-with-copy:hover,
+        .single-data-box:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.15);
         }
@@ -1887,14 +1732,14 @@
         .status-tertagih { background: #fef2f2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
         .status-lepas { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
 
-        /* Dark theme status adjustments */
-        :root[data-theme="dark"] .status-lunas { background: #166534; color: #dcfce7; }
-        :root[data-theme="dark"] .status-belum { background: #92400e; color: #fef3c7; }
-        :root[data-theme="dark"] .status-active { background: #1d4ed8; color: #dbeafe; }
-        :root[data-theme="dark"] .status-pending { background: #be185d; color: #fce7f3; }
-        :root[data-theme="dark"] .status-inactive { background: #374151; color: #f3f4f6; }
-        :root[data-theme="dark"] .status-tertagih { background: #991b1b; color: #fef2f2; }
-        :root[data-theme="dark"] .status-lepas { background: #92400e; color: #fef3c7; }
+        /* Status badge colors */
+        .status-lunas { background: #166534; color: #dcfce7; }
+        .status-belum { background: #92400e; color: #fef3c7; }
+        .status-active { background: #1d4ed8; color: #dbeafe; }
+        .status-pending { background: #be185d; color: #fce7f3; }
+        .status-inactive { background: #374151; color: #f3f4f6; }
+        .status-tertagih { background: #991b1b; color: #fef2f2; }
+        .status-lepas { background: #92400e; color: #fef3c7; }
 
         .loading, .error, .no-data {
             text-align: center;
@@ -2660,10 +2505,6 @@
                     <span>📊</span> Semua Client
                 </div>
             </div>
-            
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
-                🌙 Dark Mode
-            </button>
         </div>
 
         <!-- Progress bar for auto-refresh countdown -->
@@ -3458,31 +3299,6 @@
             return '';
         }
 
-        // ===== THEME MANAGEMENT =====
-        
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('preferred-theme', newTheme);
-            
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                themeToggle.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-            }
-        }
-
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('preferred-theme') || 'dark';
-
-            document.documentElement.setAttribute('data-theme', savedTheme);
-
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                themeToggle.textContent = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-            }
-        }
 
         // ===== AUTO-REFRESH FUNCTIONS =====
 
@@ -5287,7 +5103,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Starting Data Client Starlink - Modern Design Version');
 
-            initializeTheme();
             initializeDensity();
             initializeControlsState();
 
