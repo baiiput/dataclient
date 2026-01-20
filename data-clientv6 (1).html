@@ -2978,6 +2978,7 @@
         let countdownInterval = null;
         let remainingTime = 0;
         let lastRefreshTime = null;
+        let lastUpdateTime = null; // Timestamp for accurate countdown tracking
 
         // Column visibility configuration
         let columnVisibility = {
@@ -3332,12 +3333,17 @@
             stopAutoRefresh(); // Clear any existing timers
 
             remainingTime = refreshInterval;
+            lastUpdateTime = Date.now(); // Track when countdown started
             updateProgressBar();
             updateLastRefreshTime();
 
             // Countdown timer (updates every 100ms for smooth progress bar)
             countdownInterval = setInterval(() => {
-                remainingTime -= 0.1;
+                const now = Date.now();
+                const elapsed = (now - lastUpdateTime) / 1000; // seconds elapsed
+                lastUpdateTime = now;
+
+                remainingTime -= elapsed;
                 updateProgressBar();
 
                 if (remainingTime <= 0) {
@@ -3364,6 +3370,7 @@
 
                 // Reset timer
                 remainingTime = refreshInterval;
+                lastUpdateTime = Date.now(); // Update timestamp for next countdown
                 lastRefreshTime = new Date();
                 updateLastRefreshTime();
 
@@ -3414,6 +3421,40 @@
             if (autoRefreshEnabled) {
                 setTimeout(updateLastRefreshTime, 5000);
             }
+        }
+
+        // ===== PAGE VISIBILITY API - BACKGROUND TAB SUPPORT =====
+
+        function handleVisibilityChange() {
+            if (!autoRefreshEnabled || !lastUpdateTime) return;
+
+            if (document.hidden) {
+                // Tab became inactive - timer will be throttled by browser
+                console.log('📱 Tab inactive - countdown paused by browser');
+            } else {
+                // Tab became active again - recalculate remaining time
+                const now = Date.now();
+                const elapsed = (now - lastUpdateTime) / 1000; // seconds elapsed while inactive
+
+                remainingTime -= elapsed;
+                lastUpdateTime = now;
+
+                console.log(`📱 Tab active again - ${elapsed.toFixed(1)}s elapsed while inactive`);
+
+                // If time is up, refresh immediately
+                if (remainingTime <= 0) {
+                    console.log('⏰ Auto-refresh triggered after tab reactivation');
+                    refreshData();
+                } else {
+                    updateProgressBar();
+                }
+            }
+        }
+
+        // Initialize Page Visibility API listener
+        function initializeBackgroundRefresh() {
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            console.log('✅ Background auto-refresh enabled - countdown continues even when tab is inactive');
         }
 
         // ===== CONTROLS MANAGEMENT =====
@@ -5110,6 +5151,9 @@
             initializeFilterCards();
             initializeModernSearchButtons();
             initializeModernQuickFilters();
+
+            // Initialize background auto-refresh support
+            initializeBackgroundRefresh();
 
             if (typeof CONFIG === 'undefined') {
                 console.error('❌ CONFIG not loaded yet, waiting...');
