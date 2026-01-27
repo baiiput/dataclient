@@ -4436,8 +4436,8 @@
                     
                     // Multi-line handling
                     if (['B', 'C', 'D', 'H', 'I', 'J', 'N'].includes(col) && value) {
-                        // Add compact-cell class and data-full-text for B, C, D, H columns
-                        const isCompactColumn = ['B', 'C', 'D', 'H'].includes(col);
+                        // Add compact-cell class and data-full-text for B, C, D, H, J columns
+                        const isCompactColumn = ['B', 'C', 'D', 'H', 'J'].includes(col);
                         if (isCompactColumn) {
                             td.classList.add('compact-cell');
                             td.setAttribute('data-full-text', value);
