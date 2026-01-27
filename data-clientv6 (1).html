@@ -1487,6 +1487,39 @@
             padding-left: 12px;
         }
 
+        /* Compact columns - Nama, Login Starlink, Login Alternatif, Email */
+        td.compact-cell {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: help; /* Show that there's more content */
+        }
+
+        td.compact-cell:hover {
+            position: relative;
+        }
+
+        /* Tooltip on hover to show full content */
+        td.compact-cell:hover::after {
+            content: attr(data-full-text);
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: var(--bg-container);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            white-space: normal;
+            word-break: break-all;
+            max-width: 300px;
+            z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
         tr:nth-child(even) {
             background: var(--bg-row-even);
         }
@@ -2972,7 +3005,7 @@
         let itemsPerPage = 25;  // Default 25 items per page
 
         // Auto-refresh state
-        let autoRefreshEnabled = true; // Default: auto-refresh ON
+        let autoRefreshEnabled = false; // Default: auto-refresh OFF
         let refreshInterval = 180; // Default 3 minutes in seconds
         let refreshTimer = null;
         let countdownInterval = null;
@@ -4403,24 +4436,37 @@
                     
                     // Multi-line handling
                     if (['B', 'C', 'D', 'H', 'I', 'J', 'N'].includes(col) && value) {
+                        // Add compact-cell class and data-full-text for B, C, D, H columns
+                        const isCompactColumn = ['B', 'C', 'D', 'H'].includes(col);
+                        if (isCompactColumn) {
+                            td.classList.add('compact-cell');
+                            td.setAttribute('data-full-text', value);
+                        }
+
                         const lines = value.split('\n').filter(line => line.trim());
                         if (lines.length > 1) {
                             td.innerHTML = '';
                             lines.forEach(line => {
                                 const lineDiv = document.createElement('div');
                                 lineDiv.className = 'line-with-copy';
-                                
+
                                 const span = document.createElement('span');
-                                span.textContent = line.trim();
+                                const fullText = line.trim();
+                                // Truncate display for compact columns
+                                const displayText = isCompactColumn && fullText.length > 20
+                                    ? fullText.substring(0, 20) + '...'
+                                    : fullText;
+                                span.textContent = displayText;
+                                span.title = fullText; // Show full text on hover
                                 lineDiv.appendChild(span);
-                                
+
                                 const copyBtn = document.createElement('button');
                                 copyBtn.className = 'copy-btn';
                                 copyBtn.textContent = '📋';
-                                copyBtn.title = 'Copy: ' + line.trim();
+                                copyBtn.title = 'Copy: ' + fullText;
                                 copyBtn.onclick = function(e) {
                                     e.stopPropagation();
-                                    copyToClipboard(line.trim(), this);
+                                    copyToClipboard(fullText, this); // Copy FULL text
                                 };
                                 lineDiv.appendChild(copyBtn);
 
@@ -4440,18 +4486,24 @@
                             if (value.trim()) {
                                 const dataBox = document.createElement('div');
                                 dataBox.className = 'single-data-box';
-                                
+
                                 const span = document.createElement('span');
-                                span.textContent = value.trim();
+                                const fullText = value.trim();
+                                // Truncate display for compact columns
+                                const displayText = isCompactColumn && fullText.length > 20
+                                    ? fullText.substring(0, 20) + '...'
+                                    : fullText;
+                                span.textContent = displayText;
+                                span.title = fullText; // Show full text on hover
                                 dataBox.appendChild(span);
-                                
+
                                 const copyBtn = document.createElement('button');
                                 copyBtn.className = 'copy-btn';
                                 copyBtn.textContent = '📋';
-                                copyBtn.title = 'Copy: ' + value;
+                                copyBtn.title = 'Copy: ' + fullText;
                                 copyBtn.onclick = function(e) {
                                     e.stopPropagation();
-                                    copyToClipboard(value, this);
+                                    copyToClipboard(fullText, this); // Copy FULL text
                                 };
                                 dataBox.appendChild(copyBtn);
 
