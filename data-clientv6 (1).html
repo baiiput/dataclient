@@ -4525,45 +4525,58 @@
                     }
                     // Single data box styling
                     else if (['A', 'E', 'F', 'G', 'K', 'R'].includes(col) && value) {
+                        // Add compact-cell class and data-full-text for A, E, F columns
+                        const isCompactColumn = ['A', 'E', 'F'].includes(col);
+                        if (isCompactColumn) {
+                            td.classList.add('compact-cell');
+                            td.setAttribute('data-full-text', value);
+                        }
+
                         const dataBox = document.createElement('div');
                         dataBox.className = 'single-data-box';
-                        
+
                         const span = document.createElement('span');
-                        span.textContent = value;
-                        
+                        const fullText = value;
+                        // Truncate display for compact columns
+                        const displayText = isCompactColumn && fullText.length > 20
+                            ? fullText.substring(0, 20) + '...'
+                            : fullText;
+                        span.textContent = displayText;
+                        span.title = fullText; // Show full text on hover
+
                         // Add category indicator for column A when viewing "Semua Client"
                         if (col === 'A' && currentSheet === 'semua-client' && row._category) {
                             const categorySpan = document.createElement('span');
                             categorySpan.className = `category-indicator category-${row._category}`;
-                            
+
                             const categoryLabels = {
                                 'aktif': 'Aktif',
                                 'non-aktif': 'Non-Aktif',
                                 'lepas': 'Lepas'
                             };
-                            
+
                             categorySpan.textContent = categoryLabels[row._category] || row._category;
                             span.appendChild(categorySpan);
                         }
-                        
+
                         dataBox.appendChild(span);
-                        
+
                         const copyBtn = document.createElement('button');
                         copyBtn.className = 'copy-btn';
                         copyBtn.textContent = col === 'G' ? '📱' : '📋';
-                        copyBtn.title = col === 'G' ? 'Copy Nomor WA' : 'Copy: ' + value;
+                        copyBtn.title = col === 'G' ? 'Copy Nomor WA' : 'Copy: ' + fullText;
 
                         if (col === 'G') {
                             copyBtn.classList.add('wa-btn');
                             copyBtn.onclick = function(e) {
                                 e.stopPropagation();
-                                const cleanNumber = value.toString().replace(/\D/g, '');
+                                const cleanNumber = fullText.toString().replace(/\D/g, '');
                                 copyToClipboard(cleanNumber, this);
                             };
                         } else {
                             copyBtn.onclick = function(e) {
                                 e.stopPropagation();
-                                copyToClipboard(value, this);
+                                copyToClipboard(fullText, this); // Copy FULL text
                             };
                         }
 
