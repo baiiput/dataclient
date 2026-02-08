@@ -4406,20 +4406,17 @@
                         value = memoizedDateFormat(value);
                     }
                     
-                    // Status styling untuk kolom O
-                    if (col === 'O') {
-                        td.className = getStatusClass(value);
-                        td.style.textAlign = 'center'; // Ensure status badges are centered
+                    // Status styling untuk kolom O - wrap in span for proper alignment
+                    if (col === 'O' && value) {
+                        const statusSpan = document.createElement('span');
+                        statusSpan.className = getStatusClass(value);
+                        statusSpan.textContent = value;
+                        td.appendChild(statusSpan);
+                        td.style.textAlign = 'center';
                         td.style.verticalAlign = 'middle';
                     }
-
-                    // Apply special alignment
-                    if (['B', 'C', 'D', 'F', 'H'].includes(col)) {
-                        td.classList.add('text-left');
-                    }
-                    
                     // Multi-line handling
-                    if (['B', 'C', 'D', 'H', 'I', 'J', 'N'].includes(col) && value) {
+                    else if (['B', 'C', 'D', 'H', 'I', 'J', 'N'].includes(col) && value) {
                         // Add compact-cell class and data-full-text for B, C, D, H, J columns
                         const isCompactColumn = ['B', 'C', 'D', 'H', 'J'].includes(col);
                         if (isCompactColumn) {
