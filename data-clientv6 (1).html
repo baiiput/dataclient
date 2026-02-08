@@ -1705,6 +1705,8 @@
             font-weight: 600;
             font-size: 11px;
             display: inline-block;
+            text-align: center;
+            vertical-align: middle;
         }
 
         /* Positive statuses (Green) */
@@ -4407,8 +4409,10 @@
                     // Status styling untuk kolom O
                     if (col === 'O') {
                         td.className = getStatusClass(value);
+                        td.style.textAlign = 'center'; // Ensure status badges are centered
+                        td.style.verticalAlign = 'middle';
                     }
-                    
+
                     // Apply special alignment
                     if (['B', 'C', 'D', 'F', 'H'].includes(col)) {
                         td.classList.add('text-left');
