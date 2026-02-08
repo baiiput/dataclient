@@ -1696,21 +1696,41 @@
             }
         }
 
-        /* Status indicators */
-        .status-lunas { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-        .status-belum { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-        .status-active { background: #dbeafe; color: #1d4ed8; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-        .status-pending { background: #fce7f3; color: #be185d; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-        .status-inactive { background: #f3f4f6; color: #374151; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-        .status-tertagih { background: #fef2f2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
-        .status-lepas { background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 4px; font-weight: 600; }
+        /* Status badge colors - Consistent styling for all statuses */
 
-        /* Status badge colors */
+        /* Base status badge styling */
+        [class*="status-"] {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        /* Positive statuses (Green) */
+        .status-active { background: #166534; color: #dcfce7; }
+        .status-paid { background: #166534; color: #dcfce7; }
         .status-lunas { background: #166534; color: #dcfce7; }
+        .status-credited { background: #15803d; color: #dcfce7; }
+        .status-confirmed { background: #15803d; color: #dcfce7; }
+
+        /* Neutral/Waiting statuses (Blue) */
+        .status-ready { background: #1e40af; color: #dbeafe; }
+        .status-planned { background: #1d4ed8; color: #dbeafe; }
+        .status-standby { background: #2563eb; color: #dbeafe; }
+
+        /* In Progress statuses (Orange/Yellow) */
+        .status-pending { background: #b45309; color: #fef3c7; }
         .status-belum { background: #92400e; color: #fef3c7; }
-        .status-active { background: #1d4ed8; color: #dbeafe; }
-        .status-pending { background: #be185d; color: #fce7f3; }
-        .status-inactive { background: #374151; color: #f3f4f6; }
+        .status-migration { background: #d97706; color: #fef3c7; }
+
+        /* Negative statuses (Red) */
+        .status-suspended { background: #991b1b; color: #fef2f2; }
+        .status-cancel { background: #b91c1c; color: #fef2f2; }
+        .status-inactive { background: #7f1d1d; color: #fef2f2; }
+
+        /* Special statuses (Purple/Gray) */
+        .status-collectible { background: #5b21b6; color: #ede9fe; }
         .status-tertagih { background: #991b1b; color: #fef2f2; }
         .status-lepas { background: #92400e; color: #fef3c7; }
 
@@ -3260,16 +3280,36 @@
 
         function getStatusClass(status) {
             if (!status) return '';
-            
-            const statusLower = status.toLowerCase();
-            if (statusLower === 'lunas') return 'status-lunas';
-            if (statusLower === 'belum') return 'status-belum';
+
+            const statusLower = status.toLowerCase().trim();
+
+            // Positive statuses
             if (statusLower === 'active') return 'status-active';
+            if (statusLower === 'paid') return 'status-paid';
+            if (statusLower === 'lunas') return 'status-lunas';
+            if (statusLower === 'credited') return 'status-credited';
+            if (statusLower === 'confirmed') return 'status-confirmed';
+
+            // Neutral/Waiting statuses
+            if (statusLower === 'ready') return 'status-ready';
+            if (statusLower === 'planned') return 'status-planned';
+            if (statusLower === 'stand by' || statusLower === 'standby') return 'status-standby';
+
+            // In Progress statuses
             if (statusLower === 'pending') return 'status-pending';
+            if (statusLower === 'belum') return 'status-belum';
+            if (statusLower === 'migration') return 'status-migration';
+
+            // Negative statuses
+            if (statusLower === 'suspended') return 'status-suspended';
+            if (statusLower === 'cancel') return 'status-cancel';
             if (statusLower === 'inactive') return 'status-inactive';
+
+            // Special statuses
+            if (statusLower === 'collectible') return 'status-collectible';
             if (statusLower === 'tertagih') return 'status-tertagih';
             if (statusLower === 'lepas') return 'status-lepas';
-            
+
             return '';
         }
 
