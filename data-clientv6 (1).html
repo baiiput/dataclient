@@ -3315,6 +3315,41 @@
             return '';
         }
 
+        function getStatusIcon(status) {
+            if (!status) return '';
+
+            const statusLower = status.toLowerCase().trim();
+
+            // Positive statuses (Green) - Success icons
+            if (statusLower === 'active') return '⚡';
+            if (statusLower === 'paid') return '💰';
+            if (statusLower === 'lunas') return '✅';
+            if (statusLower === 'credited') return '💳';
+            if (statusLower === 'confirmed') return '🔒';
+
+            // Neutral/Waiting statuses (Blue) - Waiting icons
+            if (statusLower === 'ready') return '🔵';
+            if (statusLower === 'planned') return '📋';
+            if (statusLower === 'stand by' || statusLower === 'standby') return '⏸️';
+
+            // In Progress statuses (Orange) - Processing icons
+            if (statusLower === 'pending') return '⏳';
+            if (statusLower === 'belum') return '⏱️';
+            if (statusLower === 'migration') return '🔄';
+
+            // Negative statuses (Red) - Warning/Stop icons
+            if (statusLower === 'suspended') return '⛔';
+            if (statusLower === 'cancel') return '❌';
+            if (statusLower === 'inactive') return '🔴';
+
+            // Special statuses - Unique icons
+            if (statusLower === 'collectible') return '📦';
+            if (statusLower === 'tertagih') return '💸';
+            if (statusLower === 'lepas') return '🔓';
+
+            return '';
+        }
+
 
         // ===== AUTO-REFRESH FUNCTIONS =====
 
@@ -4410,7 +4445,11 @@
                     if (col === 'O' && value) {
                         const statusSpan = document.createElement('span');
                         statusSpan.className = getStatusClass(value);
-                        statusSpan.textContent = value;
+
+                        // Add icon + text
+                        const icon = getStatusIcon(value);
+                        statusSpan.textContent = icon ? `${icon} ${value}` : value;
+
                         td.appendChild(statusSpan);
                         td.style.textAlign = 'center';
                         td.style.verticalAlign = 'middle';
@@ -4971,8 +5010,10 @@
                             html += `</div>`;
                         } else if (col === 'O') {
                             const statusClass = getStatusClass(value);
+                            const statusIcon = getStatusIcon(value);
+                            const statusText = statusIcon ? `${statusIcon} ${value}` : value;
                             html += `<div class="detail-value">`;
-                            html += `<span class="${statusClass}">${value}</span>`;
+                            html += `<span class="${statusClass}">${statusText}</span>`;
                             html += `<button class="detail-copy-btn" onclick="copyToClipboard('${value}', this)">📋</button>`;
                             html += `</div>`;
                         } else {
