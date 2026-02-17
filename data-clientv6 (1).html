@@ -334,6 +334,16 @@
             color: #fef3c7;
         }
 
+        .category-tertagih {
+            background: #be185d;
+            color: #fce7f3;
+        }
+
+        .category-kosong {
+            background: #374151;
+            color: #e5e7eb;
+        }
+
         /* Controls Toggle */
         .controls-toggle-btn {
             display: flex;
@@ -2496,6 +2506,12 @@
                 <div class="sheet-tab" data-sheet="client-lepas">
                     <span>🟡</span> Client Lepas
                 </div>
+                <div class="sheet-tab" data-sheet="client-tertagih">
+                    <span>💸</span> Client Tertagih
+                </div>
+                <div class="sheet-tab" data-sheet="akun-kosong">
+                    <span>📭</span> Akun Kosong
+                </div>
                 <div class="sheet-tab" data-sheet="semua-client">
                     <span>📊</span> Semua Client
                 </div>
@@ -2746,6 +2762,14 @@
             <div class="stat-item" id="categoryStatsLepas" style="display: none;">
                 <span>🟡</span>
                 <span>Lepas: <span class="stat-number" id="lepasCount">0</span></span>
+            </div>
+            <div class="stat-item" id="categoryStatsTertagih" style="display: none;">
+                <span>💸</span>
+                <span>Tertagih: <span class="stat-number" id="tertagihCount">0</span></span>
+            </div>
+            <div class="stat-item" id="categoryStatsKosong" style="display: none;">
+                <span>📭</span>
+                <span>Akun Kosong: <span class="stat-number" id="kosongCount">0</span></span>
             </div>
             <div class="stat-item" id="activeFilterIndicator" style="display: none;">
                 <span>🔍</span>
@@ -3051,6 +3075,16 @@
                 icon: '🟡',
                 action: 'getClientLepasData'
             },
+            'client-tertagih': {
+                name: 'Client Tertagih',
+                icon: '💸',
+                action: 'getClientTertagihData'
+            },
+            'akun-kosong': {
+                name: 'Akun Kosong',
+                icon: '📭',
+                action: 'getAkunKosongData'
+            },
             'semua-client': {
                 name: 'Semua Client',
                 icon: '📊',
@@ -3121,7 +3155,9 @@
                 dateCount: allData.filter(row => row.K && row.K.toString().trim()).length,
                 aktif: currentSheet === 'semua-client' ? allData.filter(row => row._category === 'aktif').length : 0,
                 nonAktif: currentSheet === 'semua-client' ? allData.filter(row => row._category === 'non-aktif').length : 0,
-                lepas: currentSheet === 'semua-client' ? allData.filter(row => row._category === 'lepas').length : 0
+                lepas: currentSheet === 'semua-client' ? allData.filter(row => row._category === 'lepas').length : 0,
+                tertagih: currentSheet === 'semua-client' ? allData.filter(row => row._category === 'tertagih').length : 0,
+                kosong: currentSheet === 'semua-client' ? allData.filter(row => row._category === 'kosong').length : 0
             };
         }
 
@@ -3136,11 +3172,13 @@
             document.getElementById('dateCount').textContent = stats.dateCount;
             
             // Category stats for "Semua Client"
-            const categoryElements = ['categoryStats', 'categoryStatsNonAktif', 'categoryStatsLepas'];
+            const categoryElements = ['categoryStats', 'categoryStatsNonAktif', 'categoryStatsLepas', 'categoryStatsTertagih', 'categoryStatsKosong'];
             if (currentSheet === 'semua-client') {
                 document.getElementById('aktifCount').textContent = stats.aktif;
                 document.getElementById('nonAktifCount').textContent = stats.nonAktif;
                 document.getElementById('lepasCount').textContent = stats.lepas;
+                document.getElementById('tertagihCount').textContent = stats.tertagih;
+                document.getElementById('kosongCount').textContent = stats.kosong;
                 categoryElements.forEach(el => document.getElementById(el).style.display = 'flex');
             } else {
                 categoryElements.forEach(el => document.getElementById(el).style.display = 'none');
@@ -4046,7 +4084,9 @@
             const sheets = [
                 { key: 'client-aktif', action: 'getAllClientDataComplete', category: 'aktif' },
                 { key: 'client-non-aktif', action: 'getClientNonAktifData', category: 'non-aktif' },
-                { key: 'client-lepas', action: 'getClientLepasData', category: 'lepas' }
+                { key: 'client-lepas', action: 'getClientLepasData', category: 'lepas' },
+                { key: 'client-tertagih', action: 'getClientTertagihData', category: 'tertagih' },
+                { key: 'akun-kosong', action: 'getAkunKosongData', category: 'kosong' }
             ];
             
             const processSheetData = (sheetInfo) => {
@@ -4572,7 +4612,9 @@
                             const categoryLabels = {
                                 'aktif': 'Aktif',
                                 'non-aktif': 'Non-Aktif',
-                                'lepas': 'Lepas'
+                                'lepas': 'Lepas',
+                                'tertagih': 'Tertagih',
+                                'kosong': 'Akun Kosong'
                             };
 
                             categorySpan.textContent = categoryLabels[row._category] || row._category;
@@ -4962,9 +5004,11 @@
                 const categoryLabels = {
                     'aktif': 'Client Aktif',
                     'non-aktif': 'Client Non Aktif',
-                    'lepas': 'Client Lepas'
+                    'lepas': 'Client Lepas',
+                    'tertagih': 'Client Tertagih',
+                    'kosong': 'Akun Kosong'
                 };
-                
+
                 html += `<div class="detail-section" style="grid-column: 1 / -1;">`;
                 html += `<h3>🏷️ Kategori Client</h3>`;
                 html += `<div class="detail-item">`;
@@ -5055,7 +5099,9 @@
                 const categoryLabels = {
                     'aktif': 'Client Aktif',
                     'non-aktif': 'Client Non Aktif',
-                    'lepas': 'Client Lepas'
+                    'lepas': 'Client Lepas',
+                    'tertagih': 'Client Tertagih',
+                    'kosong': 'Akun Kosong'
                 };
                 allData += `Kategori: ${categoryLabels[row._category] || row._category}\n`;
             }
